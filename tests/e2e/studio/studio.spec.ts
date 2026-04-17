@@ -1,11 +1,16 @@
-import { ProjectPage } from '@app-pages/projectPage.ts';
 import { waitForGenerationResponse, waitForStorybookResponse } from '@app-helpers/api.helper';
-import { GenerationStatusApi, GenerationStepApi, TaskMessageBubbleText, TimelinePhase, TimelineStatus } from '@app-types/generation.enums';
+import {
+  GenerationStatusApi,
+  GenerationStepApi,
+  TaskMessageBubbleText,
+  TimelinePhase,
+  TimelineStatus,
+} from '@app-types/generation.enums';
 import { baseFixture as test } from '@app-fixtures';
 import { Constants } from '@app-constants/constants.ts';
 
 test.describe('Task flow', () => {
-  test('Fast mode flow', { tag: '@smoke' }, async ({ projectPage }: { projectPage: ProjectPage }): Promise<void> => {
+  test('Fast mode flow', { tag: '@smoke' }, async ({ projectPage }): Promise<void> => {
     await test.step('Open studio and create a new task via fast flow', async () => {
       await projectPage.open();
       await projectPage.sidebar.selectProject(Constants.DEFAULT_PROJECT_NAME, Constants.FIVE_SECONDS);
@@ -83,7 +88,7 @@ test.describe('Task flow', () => {
       await projectPage.expectTimelinePhaseVisible(TimelinePhase.PRE_PR);
       await projectPage.expectTimelineStatusVisible(TimelineStatus.COMPLETED, 2);
       await projectPage.expectVersionMessageContainsText('V02');
-      await projectPage.expectVersionMessageContainsText('Here\'s the PR you can share:');
+      await projectPage.expectVersionMessageContainsText("Here's the PR you can share:");
       await projectPage.checkPrLink();
     });
   });
