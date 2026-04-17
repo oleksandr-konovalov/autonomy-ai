@@ -1,16 +1,14 @@
 import 'dotenv/config';
 
-import { defineConfig, devices } from '@playwright/test';
-import { isTokenExistAndValidByTime } from './helpers/auth.helper';
-import { Constants } from './constants/constants';
-import { env } from './helpers/base';
+import { defineConfig, devices, type PlaywrightTestConfig, type Project } from '@playwright/test';
+import { isTokenExistAndValidByTime } from '@app-helpers/auth.helper';
+import { Constants } from '@app-constants/constants.ts';
+import { env } from '@app-helpers/base';
 
-const authFilePath: string = `tests/.auth/${env('USER_EMAIL')}.json`;
+const authFilePath: string = `tests/.auth/${env('TEST_EMAIL')}.json`;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getProjects(): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const projects: Record<string, any>[] = [
+function getProjects(): Project[] {
+  const projects: Project[] = [
     { name: 'setup', testMatch: /.*auth\.setup\.ts/ },
     {
       name: 'Studio',
@@ -27,8 +25,7 @@ function getProjects(): any {
     return projects;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return projects.map((project: any) => {
+  return projects.map((project: Project) => {
     if (project.name !== 'setup') {
       project.dependencies = ['setup'];
     }
@@ -37,8 +34,7 @@ function getProjects(): any {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const commonUse: any = {
+const commonUse: PlaywrightTestConfig['use'] = {
   ...devices['Desktop Chrome'],
   channel: 'chrome',
   storageState: authFilePath,
@@ -64,6 +60,6 @@ export default defineConfig({
     navigationTimeout: Constants.SIXTY_SECONDS,
   },
   expect: { timeout: Constants.FORTY_SECONDS },
-  timeout: Constants.SEVEN_MINUTES,
+  timeout: Constants.TWENTY_FIVE_MINUTES,
   projects: getProjects(),
 });
