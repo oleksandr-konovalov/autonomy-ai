@@ -1,6 +1,7 @@
 import { BrowserContext, Locator, Page, expect } from '@playwright/test';
 
-import { Component } from '../abstractClass';
+import { Component } from '@app-base';
+import { logStep } from '@app-utils/logStep';
 
 export class Form extends Component {
   private readonly form: Locator;
@@ -10,19 +11,23 @@ export class Form extends Component {
     this.form = page.getByTestId(testId);
   }
 
+  @logStep('Verify form is loaded')
   public async expectLoaded(): Promise<void> {
-    await expect(this.form, 'Expected form to be visible').toBeVisible();
+    await expect(this.form, 'Expected form to be visible').toBeInViewport();
   }
 
-  public async expectVisible(): Promise<void> {
-    await expect(this.form, 'Expect form to be visible').toBeVisible();
+  @logStep('Verify form is visible')
+  public async expectInViewport(): Promise<void> {
+    await expect(this.form, 'Expect form to be visible').toBeInViewport();
   }
 
-  public async expectNotVisible(): Promise<void> {
-    await expect(this.form, 'Expect form NOT to be visible').not.toBeVisible();
+  @logStep('Verify form is not visible')
+  public async expectNotInViewport(): Promise<void> {
+    await expect(this.form, 'Expect form NOT to be visible').not.toBeInViewport();
   }
 
-  public async expectContainText(text: string): Promise<void> {
+  @logStep('Verify form contains text')
+  public async expectContainsText(text: string): Promise<void> {
     await expect(this.form, `Expect form to contain text: ${text}`).toContainText(text);
   }
 }

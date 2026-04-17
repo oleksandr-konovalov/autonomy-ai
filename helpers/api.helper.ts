@@ -1,6 +1,21 @@
 import { Page, Response } from '@playwright/test';
 
+import { GenerationResponseBody, StorybookResponseBody } from '@app-types/apiResponses';
 import { GenerationStatusApi, GenerationStepApi } from '@app-types/generation.enums';
+
+async function getResponseBody<T>(response: Response): Promise<T | null> {
+  try {
+    const body = await response.json();
+
+    if (!body || typeof body !== 'object') {
+      return null;
+    }
+
+    return body as T;
+  } catch {
+    return null;
+  }
+}
 
 export async function waitForGenerationResponse(
   page: Page,
@@ -19,7 +34,11 @@ export async function waitForGenerationResponse(
         return false;
       }
 
-      const body = await response.json();
+      const body = await getResponseBody<GenerationResponseBody>(response);
+
+      if (!body) {
+        return false;
+      }
 
       return body.task?.status_details?.step === step && body.task?.status_details?.status === generationStatus;
     },
@@ -27,16 +46,20 @@ export async function waitForGenerationResponse(
   );
 }
 
-export async function waitForStorybookResponse(page: Page, searchUrl: string, timeout?: number): Promise<Response> {
+export async function waitForStorybookResponse(page: Page, timeout?: number): Promise<Response> {
   return page.waitForResponse(
     async (response: Response) => {
-      if (!response.url().includes(searchUrl) || !response.url().includes('/tasks/') || !response.url().includes('/storybook')) {
+      if (!response.url().includes('/tasks/') || !response.url().includes('/storybook')) {
         return false;
       }
 
-      const body = await response.json();
+      if (response.status() !== 200) {
+        return false;
+      }
 
-      return body.dev_server_running === true && body.storybook_url;
+      const body = await getResponseBody<StorybookResponseBody>(response);
+
+      return body?.dev_server_running === true && typeof body.storybook_url === 'string' && body.storybook_url.length > 0;
     },
     { timeout },
   );

@@ -26,7 +26,7 @@ export class Dropdown extends Component {
 
   @logStep('Verify dropdown is loaded')
   public async expectLoaded(): Promise<void> {
-    await expect(this.dropdown, 'Expected dropdown to be visible').toBeVisible();
+    await expect(this.dropdown, 'Expected dropdown to be visible').toBeInViewport();
   }
 
   @logStep('Wait for dropdown to be hidden')
