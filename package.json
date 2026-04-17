@@ -1,0 +1,26 @@
+{
+  "name": "autonomy-ai-autotests",
+  "version": "1.0.0",
+  "description": "Automated tests for studio.autonomyai.io",
+  "private": true,
+  "engines": {
+    "node": "^22.14"
+  },
+  "scripts": {
+    "pw:test": "npx playwright test",
+    "pw:debug": "npx playwright test --debug",
+    "pw:ui": "npx playwright test --ui",
+    "pw:ts:build": "npx tsc -p tests/tsconfig.json",
+    "pw:browsers:install": "npx playwright install",
+    "pw:browsers:uninstall": "npx playwright uninstall --all"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.52.0",
+    "@types/node": "22.14.1",
+    "dotenv": "17.3.1",
+    "playwright": "1.52.0",
+    "prettier": "3.8.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.8.3"
+  }
+}

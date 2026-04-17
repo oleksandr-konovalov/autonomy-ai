@@ -1,0 +1,40 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.angulardoc.json
+
+# IDE - VSCode
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+# e2e-pw
+/tests/.auth/
+/tests/dist/
+/playwright-report/
+/test-results/
+/playwright/.cache/
+
+# env
+.env
+
+# Ignore Mac DS_Store files
+.DS_Store
+**/.DS_Store

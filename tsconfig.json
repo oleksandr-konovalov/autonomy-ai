@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "target": "es6",
+    "module": "es6",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "paths": {
+      "@app-base": ["tests/abstractClass.ts"],
+      "@app-fixtures": ["tests/fixtures.ts"],
+      "@app-pages/*": ["tests/pages/*"],
+      "@app-components/*": ["tests/components/*"],
+      "@app-helpers/*": ["helpers/*"],
+      "@app-types/*": ["types/*"],
+      "@app-utils/*": ["utils/*"],
+      "@app-constants/*": ["constants/*"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["tests/**/*.ts", "helpers/**/*.ts", "utils/**/*.ts", "types/**/*.ts", "constants/**/*.ts", "*.ts"]
+}
