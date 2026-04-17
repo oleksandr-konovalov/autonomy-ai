@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { expect } from '@playwright/test';
 
 import { AppPage } from '@app-base';
@@ -29,12 +30,21 @@ export class LoginPage extends AppPage {
   }
 
   @logStep('Login with saving storage')
-  public async loginWithSavingStorage({ email, password, authFilePath }: { email: string; password: string; authFilePath: string }): Promise<void> {
+  public async loginWithSavingStorage({
+    email,
+    password,
+    authFilePath,
+  }: {
+    email: string;
+    password: string;
+    authFilePath: string;
+  }): Promise<void> {
     const studioPage: ProjectPage = new ProjectPage(this.page, this.context);
 
     await this.open();
     await this.login({ email, password });
     await studioPage.expectLoaded();
+    fs.mkdirSync('tests/.auth', { recursive: true });
     await this.page.context().storageState({ path: authFilePath });
   }
 }

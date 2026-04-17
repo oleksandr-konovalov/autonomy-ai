@@ -17,11 +17,7 @@ function getProjects(): Project[] {
     },
   ];
 
-  if (process.env.CI) {
-    return projects;
-  }
-
-  if (isTokenExistAndValidByTime(authFilePath)) {
+  if (!process.env.CI && isTokenExistAndValidByTime(authFilePath)) {
     return projects;
   }
 
