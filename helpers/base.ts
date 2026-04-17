@@ -1,4 +1,4 @@
-import { EnvVars } from '../types/envVars';
+import { EnvVars } from '@app-types/envVars';
 
 export function env(key: EnvVars): string {
   const value: string = process.env[key];

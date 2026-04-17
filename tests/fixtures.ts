@@ -10,11 +10,11 @@ import {
 } from '@playwright/test';
 
 import { LoginPage } from '@app-pages/login.page';
-import { StudioPage } from '@app-pages/studio.page';
+import { ProjectPage } from '@app-pages/projectPage.ts';
 
 export interface Pages {
   loginPage: LoginPage;
-  studioPage: StudioPage;
+  projectPage: ProjectPage;
 }
 
 export const baseFixture: TestType<
@@ -22,9 +22,13 @@ export const baseFixture: TestType<
   PlaywrightWorkerArgs & PlaywrightWorkerOptions
 > = test.extend<Pages>({
   loginPage: async ({ page, context }: { page: Page; context: BrowserContext }, use: (loginPage: LoginPage) => Promise<void>) => {
-    await use(new LoginPage(page, context));
+    await test.step('Create login page fixture', async () => {
+      await use(new LoginPage(page, context));
+    });
   },
-  studioPage: async ({ page, context }: { page: Page; context: BrowserContext }, use: (studioPage: StudioPage) => Promise<void>) => {
-    await use(new StudioPage(page, context));
+  projectPage: async ({ page, context }: { page: Page; context: BrowserContext }, use: (studioPage: ProjectPage) => Promise<void>) => {
+    await test.step('Create project page fixture', async () => {
+      await use(new ProjectPage(page, context));
+    });
   },
 });

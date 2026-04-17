@@ -1,1 +1,1 @@
-export type EnvVars = 'USER_EMAIL' | 'USER_PASSWORD' | 'BASE_URL';
+export type EnvVars = 'TEST_EMAIL' | 'TEST_PASSWORD' | 'BASE_URL';
