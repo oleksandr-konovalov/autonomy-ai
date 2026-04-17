@@ -4,13 +4,13 @@ import { GenerationStatusApi, GenerationStepApi, TaskMessageBubbleText, Timeline
 import { baseFixture as test } from '@app-fixtures';
 import { Constants } from '@app-constants/constants.ts';
 
-test.describe('Studio', () => {
-  test('Studio page opens successfully', { tag: '@smoke' }, async ({ projectPage }: { projectPage: ProjectPage }): Promise<void> => {
-    await test.step('Open studio and create a new task', async () => {
+test.describe('Task flow', () => {
+  test('Fast mode flow', { tag: '@smoke' }, async ({ projectPage }: { projectPage: ProjectPage }): Promise<void> => {
+    await test.step('Open studio and create a new task via fast flow', async () => {
       await projectPage.open();
       await projectPage.sidebar.selectProject(Constants.DEFAULT_PROJECT_NAME, Constants.FIVE_SECONDS);
       await projectPage.fastModeButton.expectInViewport();
-      await projectPage.expectActiveProjectText('oleksandr-konovalov/jira-clone');
+      await projectPage.expectActiveProjectText(`${Constants.DEFAULT_USERNAME}/${Constants.DEFAULT_PROJECT_NAME}`);
       await projectPage.taskInput.fill(TaskMessageBubbleText.GENERATE_PROMPT);
       await projectPage.generateButton.click();
       await projectPage.expectTaskMessageBubbleText(TaskMessageBubbleText.GENERATE_PROMPT);

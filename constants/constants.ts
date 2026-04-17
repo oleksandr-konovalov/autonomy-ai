@@ -1,4 +1,5 @@
 export class Constants {
+  public static readonly DEFAULT_USERNAME: string = 'oleksandr-konovalov';
   public static readonly DEFAULT_PROJECT_NAME: string = 'jira-clone';
   public static readonly FIVE_SECONDS: number = 5000;
   public static readonly TEN_SECONDS: number = 10000;
