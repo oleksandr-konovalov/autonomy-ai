@@ -3,6 +3,7 @@ import { BrowserContext, Locator, Page, expect } from '@playwright/test';
 import { Component } from '@app-base';
 import { logStep } from '@app-utils/logStep';
 import { Button } from '@app-components/button.component.ts';
+import { Constants } from '@app-constants/constants.ts';
 
 export class Dropdown extends Component {
   private readonly dropdown: Locator;
@@ -34,7 +35,23 @@ export class Dropdown extends Component {
     await this.dropdown.waitFor({ state: 'hidden', timeout });
   }
 
-  public option(text: string): Locator {
+  @logStep('Open dropdown')
+  public async open(): Promise<void> {
+    await this.button.click();
+    await this.expectLoaded();
+  }
+
+  @logStep('Select option by text')
+  public async selectOptionByText(text: string): Promise<void> {
+    await this.option(text).click();
+    await this.waitForHidden(Constants.FIVE_SECONDS);
+  }
+
+  public expectOptionSelected(text: string): Promise<void> {
+    return this.button.expectHasText(text);
+  }
+
+  private option(text: string): Locator {
     return this.dropdown.locator('li').filter({ hasText: text });
   }
 }

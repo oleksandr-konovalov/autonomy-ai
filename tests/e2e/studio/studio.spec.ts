@@ -3,26 +3,31 @@ import {
   GenerationStatusApi,
   GenerationStepApi,
   TaskMessageBubbleText,
+  TaskType,
   TimelinePhase,
   TimelineStatus,
 } from '@app-types/generation.enums';
 import { baseFixture as test } from '@app-fixtures';
 import { Constants } from '@app-constants/constants.ts';
 
-test.describe('Task flow', () => {
-  test('Fast mode flow', { tag: '@smoke' }, async ({ projectPage }): Promise<void> => {
+test.describe('Full task flow', () => {
+  test(`Fast mode flow - Plan flow`, { tag: '@smoke' }, async ({ projectPage }): Promise<void> => {
     await test.step('Open studio and create a new task via fast flow', async () => {
       await projectPage.open();
-      await projectPage.sidebar.selectProject(Constants.DEFAULT_PROJECT_NAME, Constants.FIVE_SECONDS);
+      await projectPage.sidebar.projectDropdown.open();
+      await projectPage.sidebar.projectDropdown.selectOptionByText(Constants.DEFAULT_PROJECT_NAME);
       await projectPage.fastModeButton.expectInViewport();
       await projectPage.expectActiveProjectText(`${Constants.DEFAULT_USERNAME}/${Constants.DEFAULT_PROJECT_NAME}`);
+      await projectPage.stepDropdown.open();
+      await projectPage.stepDropdown.selectOptionByText(TaskType.PLAN);
+      await projectPage.stepDropdown.expectOptionSelected(TaskType.PLAN);
       await projectPage.taskInput.fill(TaskMessageBubbleText.GENERATE_PROMPT);
       await projectPage.generateButton.click();
       await projectPage.expectTaskMessageBubbleText(TaskMessageBubbleText.GENERATE_PROMPT);
+      await projectPage.expectSystemMessageContainsText('Setting up environment');
     });
 
-    await test.step('Verify planning phase is generated', async () => {
-      await projectPage.expectSystemMessageContainsText('Setting up environment');
+    await test.step('Check of planning phase', async () => {
       await projectPage.expectTimelinePhaseVisible(TimelinePhase.PLANNING);
       await projectPage.expectTimelineStatusVisible(TimelineStatus.RUNNING_STEP);
       await projectPage.expectTimelineStepCountGreaterThan(0);
@@ -42,12 +47,15 @@ test.describe('Task flow', () => {
       await projectPage.expectPlanProseBlockVisible();
       await projectPage.expectTaskSpecCardContainsText('Task Spec Doc');
       await projectPage.expectTaskSpecCardContainsText('Click to view full document');
-      await projectPage.buildButton.expectInViewport();
     });
 
-    await test.step('Approve the plan and verify code generation', async () => {
+    await test.step('Check of approving plan', async () => {
+      await projectPage.buildButton.expectInViewport();
       await projectPage.buildButton.click();
       await projectPage.expectTaskMessageBubbleText(TaskMessageBubbleText.BUILD_APPROVED);
+    });
+
+    await test.step('Check of code generation phase', async () => {
       await projectPage.expectTimelinePhaseVisible(TimelinePhase.CODE_GENERATION);
       await projectPage.expectTimelineStatusVisible(TimelineStatus.RUNNING_STEP);
       await projectPage.expectTimelineStepCountGreaterThan(0);

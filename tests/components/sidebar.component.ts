@@ -19,11 +19,4 @@ export class Sidebar extends Component {
   public async expectLoaded(): Promise<void> {
     await expect(this.sidebar, 'Expected sidebar to be visible').toBeInViewport();
   }
-
-  @logStep('Select project from sidebar')
-  public async selectProject(projectName: string, timeout?: number): Promise<void> {
-    await this.projectDropdown.button.click();
-    await this.projectDropdown.option(projectName).click();
-    await this.projectDropdown.waitForHidden(timeout);
-  }
 }

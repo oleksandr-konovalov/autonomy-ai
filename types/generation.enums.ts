@@ -21,6 +21,11 @@ export enum TimelineStatus {
 
 export enum TaskMessageBubbleText {
   GENERATE_PROMPT = 'update project title font to Poppins in the project card on the main project page (/projects url)',
-  BUILD_APPROVED = 'Plan approved. Let\'s make it real!',
+  BUILD_APPROVED = "Plan approved. Let's make it real!",
   SEND_TO_DEVS = 'Review my changes, clean up the code for production, and send as a pull request',
+}
+
+export enum TaskType {
+  PLAN = 'Plan',
+  BUILD = 'Build',
 }

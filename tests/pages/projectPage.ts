@@ -7,6 +7,8 @@ import { Button } from '@app-components/button.component.ts';
 import { Sidebar } from '@app-components/sidebar.component.ts';
 import { logStep } from '@app-utils/logStep';
 import { TaskMessageBubbleText, TimelinePhase, TimelineStatus } from '@app-types/generation.enums';
+import { Dropdown } from '@app-components/dropdown.component.ts';
+import { Constants } from '@app-constants/constants.ts';
 
 export class ProjectPage extends AppPage {
   public pagePath: string = env('BASE_URL');
@@ -15,10 +17,16 @@ export class ProjectPage extends AppPage {
   private readonly activeProject: Locator = this.pageRoot.locator('h1').first();
   private readonly taskMessageBubble: Locator = this.page.locator('.bg-second-elevation.max-w-\\[80\\%\\]');
   private readonly systemMessageText: Locator = this.page.locator('span.whitespace-pre-wrap');
-  private readonly timelineExpandButton: Locator = this.page.locator('button.flex.items-center.gap-2.text-dark-400.text-sm.py-1');
-  private readonly timelineStep: Locator = this.page.locator('span.text-dark-400.text-sm.leading-snug.system-message-shine');
+  private readonly timelineExpandButton: Locator = this.page.locator(
+    'button.flex.items-center.gap-2.text-dark-400.text-sm.py-1',
+  );
+  private readonly timelineStep: Locator = this.page.locator(
+    'span.text-dark-400.text-sm.leading-snug.system-message-shine',
+  );
   private readonly planProseBlock: Locator = this.page.locator('.prose.prose-invert.prose-sm');
-  private readonly taskSpecCard: Locator = this.page.locator('div.flex.flex-col.relative.overflow-hidden.bg-second-elevation.border.border-divider.shadow-medium.rounded-large');
+  private readonly taskSpecCard: Locator = this.page.locator(
+    'div.flex.flex-col.relative.overflow-hidden.bg-second-elevation.border.border-divider.shadow-medium.rounded-large',
+  );
   private readonly versionMessage: Locator = this.page.getByTestId('version-message');
   private readonly prLink: Locator = this.versionMessage.locator('a');
   public sidebar: Sidebar = new Sidebar(this.page, this.context);
@@ -29,6 +37,10 @@ export class ProjectPage extends AppPage {
   public generateButton: Button = new Button(this.page, this.context, 'submit-button');
   public sendToDevsButton: Button = new Button(this.page, this.context, 'send-to-devs-button');
   public confirmSendButton: Button = new Button(this.page, this.context, 'send-to-devs-confirm-button');
+  public stepDropdown: Dropdown = new Dropdown(this.page, this.context, {
+    button: this.page.getByTestId('step-selector-button'),
+    dropdown: this.page.getByRole('dialog'),
+  });
 
   @logStep('Verify project page is loaded')
   public async expectLoaded(): Promise<void> {
@@ -39,7 +51,10 @@ export class ProjectPage extends AppPage {
 
   @logStep('Verify app preview iframe is visible')
   public async expectAppPreviewIframeVisible(): Promise<void> {
-    await expect(this.page.locator('iframe[title="Preview Rendering"]'), 'Expected app preview iframe to be visible').toBeInViewport();
+    await expect(
+      this.page.locator('iframe[title="Preview Rendering"]'),
+      'Expected app preview iframe to be visible',
+    ).toBeInViewport();
   }
 
   @logStep('Verify version message contains text')
@@ -89,7 +104,9 @@ export class ProjectPage extends AppPage {
 
   @logStep('Verify timeline status is visible')
   public async expectTimelineStatusVisible(status: TimelineStatus, index: number = 0): Promise<void> {
-    await expect(this.timelineExpandButton.filter({ hasText: status }).nth(index)).toBeInViewport();
+    await expect(this.timelineExpandButton.filter({ hasText: status }).nth(index)).toBeInViewport({
+      timeout: Constants.FIVE_MINUTES,
+    });
   }
 
   @logStep('Verify PR link opens expected URL')
